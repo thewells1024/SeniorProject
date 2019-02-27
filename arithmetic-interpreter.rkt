@@ -27,3 +27,10 @@
         (export program^)
         (: prog Program)
         (define prog '(add1 (sub1 (sub1 (sub1 4)))))))
+
+; uncomment the following line to run example-prog1
+#;(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) arithmetic-interpreter]
+                                    [((P : program^)) example-prog1]
+                                    [() runner I P])))
