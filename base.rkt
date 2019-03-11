@@ -27,4 +27,4 @@
             [_ (error "Unknown computation")]))
         (: resources Resources)
         ; This cast won't fail, the type checker just doesn't like thinking of '() as a list
-        (define resources (cast '() Resources))))
+        (define resources (cast (hash) Resources))))

@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide Context extend-context ref-context Program Resources Val Lambda Val? inVal Exc inExc Fx Computation Request Result)
+(provide Context extend-context ref-context Program Resources add-resource find-resource Val Lambda Val? inVal Exc inExc Fx Computation Request Result)
 
 ; transparent struct
 (define-syntax tstruct
@@ -19,7 +19,15 @@
 
 (define-type Program Sexp)
 
-(define-type Resources (Listof Any))
+(define-type Resources (Immutable-HashTable Symbol Any))
+
+(: add-resource (-> Resources Symbol Any Resources))
+(define (add-resource resources name resource)
+  (if (hash-has-key? resources name)
+      (error "Name collision")
+      (hash-set resources name resource)))
+
+(define find-resource hash-ref)
 
 (define-type Val (U Integer Boolean Lambda))
 (tstruct Lambda ([cont : (-> Val Computation)]))

@@ -20,4 +20,4 @@
         (: admin-lang (-> Computation Resources (Pairof Val Resources)))
         (define (admin-lang comp resources)
           (error "Bad Admin"))
-        (define resources (cast '() Resources))))
+        (define resources (cast (hash) Resources))))
