@@ -35,7 +35,7 @@
         (define prog '(add1 (sub1 (sub1 (sub1 4)))))))
 
 ; uncomment the following line to run example-prog1
-(invoke-unit (compound-unit (import)
+#;(invoke-unit (compound-unit (import)
                               (export)
                               (link [((I : interpreter^)) state-interpreter]
                                     [((P : program^)) example-prog1]
@@ -51,7 +51,7 @@
                           (add1 (sub1 (sub1 4)))))))
 
 ; uncomment the following line to run example-prog2
-(invoke-unit (compound-unit (import)
+#;(invoke-unit (compound-unit (import)
                               (export)
                               (link [((I : interpreter^)) state-interpreter]
                                     [((P : program^)) example-prog2]
@@ -71,7 +71,7 @@
                                      (λ w (sub1 (var w))))) 11))))
 
 ; uncomment the following line to run example-prog3
-(invoke-unit (compound-unit (import)
+#;(invoke-unit (compound-unit (import)
                               (export)
                               (link [((I : interpreter^)) state-interpreter]
                                     [((P : program^)) example-prog3]
@@ -88,7 +88,7 @@
                                     (add1 (unbox (var b)))))))))
 
 ; uncomment the following line to run example-prog4
-(invoke-unit (compound-unit (import)
+#;(invoke-unit (compound-unit (import)
                               (export)
                               (link [((I : interpreter^)) state-interpreter]
                                     [((P : program^)) example-prog4]

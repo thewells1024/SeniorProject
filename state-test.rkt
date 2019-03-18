@@ -17,7 +17,15 @@
         (check-equal? (admin-top (eval-top
                                   '(box 3)
                                   (cast (hash) Context))
-                                 resources-top) (cons (Location 0) (hash 'store (hash 0 3))))))
+                                 resources-top) (cons (Location 0) (hash 'store (hash 0 3))))
+        (check-equal? (admin-top (eval-top
+                                  '(unbox (box 3))
+                                  (cast (hash) Context))
+                                 resources-top) (cons 3 (hash 'store (hash 0 3))))
+        (check-equal? (admin-top (eval-top
+                                  '(<- (box 3) 7)
+                                  (cast (hash) Context))
+                                 resources-top) (cons (Location 0) (hash 'store (hash 0 7))))))
 
 (: state-test-prog (Unit (import) (export) Any))
 (define state-test-prog
