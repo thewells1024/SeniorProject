@@ -14,6 +14,7 @@
 (require "conditionals.rkt")
 (require "functions.rkt")
 (require "state.rkt")
+(require "control.rkt")
 
 (: state-interpreter (Unit (import) (export interpreter^)))
 (define state-interpreter
@@ -24,7 +25,8 @@
                        [((C : language^)) conditionalsM A T]
                        [((F : language^)) functionsM C T]
                        [((S : language^)) stateM F T]
-                       [((T : top^)) top S]
+                       [((Ctrl : language^)) controlM S T]
+                       [((T : top^)) top Ctrl]
                        [((I : interpreter^)) interpreter T])))
 
 (: example-prog1 (Unit (import) (export program^)))
@@ -88,8 +90,24 @@
                                     (add1 (unbox (var b)))))))))
 
 ; uncomment the following line to run example-prog4
-(invoke-unit (compound-unit (import)
+#;(invoke-unit (compound-unit (import)
                               (export)
                               (link [((I : interpreter^)) state-interpreter]
                                     [((P : program^)) example-prog4]
+                                    [() runner I P])))
+
+(: example-prog5 (Unit (import) (export program^)))
+(define example-prog5
+  (unit (import)
+        (export program^)
+        (: prog Program)
+        (define prog '(app (λ x (catch exc (add1 (if (zero? (var x))
+                                                     (throw exc (sub1 (var x)))
+                                                     (sub1 (var x)))))) 0))))
+
+; uncomment the following line to run example-prog4
+(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) state-interpreter]
+                                    [((P : program^)) example-prog5]
                                     [() runner I P])))

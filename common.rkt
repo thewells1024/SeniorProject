@@ -1,9 +1,9 @@
 #lang typed/racket
 
 (provide Context extend-context ref-context Program
-         Resources add-resource find-resource Val Lambda
-         Location Location? Val? inVal Exc inExc Fx
-         Box Unbox Rebox Computation Request Result)
+         Resources add-resource find-resource Kont Val Lambda
+         Location Location? Continuation Continuation? Val? inVal
+         Exc inExc Fx Box Unbox Rebox Computation Request Result)
 
 ; transparent struct
 (define-syntax tstruct
@@ -32,9 +32,12 @@
 
 (define find-resource hash-ref)
 
-(define-type Val (U Integer Boolean Lambda Location))
-(tstruct Lambda ([cont : (-> Val Computation)]))
+(define-type Kont (-> Val Computation))
+
+(define-type Val (U Integer Boolean Lambda Location Continuation))
+(tstruct Lambda ([cont : Kont]))
 (tstruct Location ([location : Integer]))
+(tstruct Continuation ([cont : Kont]))
 
 (: Val? (-> Any Boolean))
 (define Val? (make-predicate Val))
@@ -43,9 +46,9 @@
 (define (inVal val)
   val)
 
-(tstruct Fx ([cont : (Val -> Computation)] [Request : Request]))
+(tstruct Fx ([kont : Kont] [request : Request]))
 (define-type Computation (U Fx Val))
-(define-type Request (U Exc Box Unbox Rebox))
+(define-type Request (U Exc Box Unbox Rebox Continuation))
 (tstruct Exc ([val : Symbol]))
 
 (: inExc (-> Symbol Fx))
