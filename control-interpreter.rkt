@@ -16,8 +16,8 @@
 (require "state.rkt")
 (require "control.rkt")
 
-(: state-interpreter (Unit (import) (export interpreter^)))
-(define state-interpreter
+(: control-interpreter (Unit (import) (export interpreter^)))
+(define control-interpreter
   (compound-unit (import)
                  (export I)
                  (link [((B : language^)) baseM]
@@ -39,7 +39,7 @@
 ; uncomment the following line to run example-prog1
 #;(invoke-unit (compound-unit (import)
                               (export)
-                              (link [((I : interpreter^)) state-interpreter]
+                              (link [((I : interpreter^)) control-interpreter]
                                     [((P : program^)) example-prog1]
                                     [() runner I P])))
 
@@ -55,7 +55,7 @@
 ; uncomment the following line to run example-prog2
 #;(invoke-unit (compound-unit (import)
                               (export)
-                              (link [((I : interpreter^)) state-interpreter]
+                              (link [((I : interpreter^)) control-interpreter]
                                     [((P : program^)) example-prog2]
                                     [() runner I P])))
 
@@ -75,7 +75,7 @@
 ; uncomment the following line to run example-prog3
 #;(invoke-unit (compound-unit (import)
                               (export)
-                              (link [((I : interpreter^)) state-interpreter]
+                              (link [((I : interpreter^)) control-interpreter]
                                     [((P : program^)) example-prog3]
                                     [() runner I P])))
 
@@ -92,7 +92,7 @@
 ; uncomment the following line to run example-prog4
 #;(invoke-unit (compound-unit (import)
                               (export)
-                              (link [((I : interpreter^)) state-interpreter]
+                              (link [((I : interpreter^)) control-interpreter]
                                     [((P : program^)) example-prog4]
                                     [() runner I P])))
 
@@ -105,9 +105,85 @@
                                                      (throw exc (sub1 (var x)))
                                                      (sub1 (var x)))))) 0))))
 
-; uncomment the following line to run example-prog4
+; uncomment the following line to run example-prog5
 (invoke-unit (compound-unit (import)
                               (export)
-                              (link [((I : interpreter^)) state-interpreter]
+                              (link [((I : interpreter^)) control-interpreter]
+                                    [((P : program^)) example-prog5]
+                                    [() runner I P])))
+
+(: control-interpreter-1 (Unit (import) (export interpreter^)))
+(define control-interpreter-1
+  (compound-unit (import)
+                 (export I)
+                 (link [((B : language^)) baseM]
+                       [((C : language^)) conditionalsM B T]
+                       [((A : language^)) arithmeticM C T]
+                       [((F : language^)) functionsM A T]
+                       [((S : language^)) stateM F T]
+                       [((Ctrl : language^)) controlM S T]
+                       [((T : top^)) top Ctrl]
+                       [((I : interpreter^)) interpreter T])))
+
+(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) control-interpreter-1]
+                                    [((P : program^)) example-prog5]
+                                    [() runner I P])))
+
+(: control-interpreter-2 (Unit (import) (export interpreter^)))
+(define control-interpreter-2
+  (compound-unit (import)
+                 (export I)
+                 (link [((B : language^)) baseM]
+                       [((F : language^)) functionsM B T]
+                       [((C : language^)) conditionalsM F T]
+                       [((A : language^)) arithmeticM C T]
+                       [((S : language^)) stateM A T]
+                       [((Ctrl : language^)) controlM S T]
+                       [((T : top^)) top Ctrl]
+                       [((I : interpreter^)) interpreter T])))
+
+(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) control-interpreter-2]
+                                    [((P : program^)) example-prog5]
+                                    [() runner I P])))
+
+(: control-interpreter-3 (Unit (import) (export interpreter^)))
+(define control-interpreter-3
+  (compound-unit (import)
+                 (export I)
+                 (link [((B : language^)) baseM]
+                       [((S : language^)) stateM B T]
+                       [((F : language^)) functionsM S T]
+                       [((C : language^)) conditionalsM F T]
+                       [((A : language^)) arithmeticM C T]
+                       [((Ctrl : language^)) controlM A T]
+                       [((T : top^)) top Ctrl]
+                       [((I : interpreter^)) interpreter T])))
+
+(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) control-interpreter-3]
+                                    [((P : program^)) example-prog5]
+                                    [() runner I P])))
+
+(: control-interpreter-4 (Unit (import) (export interpreter^)))
+(define control-interpreter-4
+  (compound-unit (import)
+                 (export I)
+                 (link [((B : language^)) baseM]
+                       [((Ctrl : language^)) controlM B T]
+                       [((S : language^)) stateM Ctrl T]
+                       [((F : language^)) functionsM S T]
+                       [((C : language^)) conditionalsM F T]
+                       [((A : language^)) arithmeticM C T]
+                       [((T : top^)) top A]
+                       [((I : interpreter^)) interpreter T])))
+
+(invoke-unit (compound-unit (import)
+                              (export)
+                              (link [((I : interpreter^)) control-interpreter-4]
                                     [((P : program^)) example-prog5]
                                     [() runner I P])))

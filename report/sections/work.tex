@@ -1,0 +1,68 @@
+% !TeX root = ../report.tex
+
+\section{Implementation}
+\subsection{Architecture}
+I was able to rely on the unit definitions in \verb#typed/racket/unit#.
+
+The implementation relies on the signature definitions of \langSig and \topSig defined in \verb#signatures.rkt#.
+\lstinputlisting[frame=tb,
+    caption={Handler function},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/signature.rkt}
+
+The root of this system is the base unit, defined in \verb#base.rkt#, which will either loop forever or error out.
+
+Each module then imports a \langSig and a \topSig signature and provides a \langSig signature.
+
+\verb#top.rkt# defines a unit that takes a \langSig signature and provides a \topSig signature. This module simply wires \verb#*-lang# to it's associated \verb#*-top# name, and defines the \verb#handler# required by the \topSig signature.
+\lstinputlisting[frame=tb,
+    caption={Handler function},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/handler.rkt}
+
+To make the languages easier to work with, the interpreter\textasciicircum, program\textasciicircum, and runner\textasciicircum signatures are provided. interpreter\textasciicircum only exports one name, and is an entry point for a program so the person writing a program for the language will not need to understand anything about the underlying language components, or even the system itself. program\textasciicircum only exports one name, and is meant to encapsulate the program that a language user is writing. runner\textasciicircum will combine a program\textasciicircum and and interpreter\textasciicircum returning the result of the computation. 
+\subsection{Modules}
+\subsubsection{Base}
+The base module serves as the base of every other language. This language fragment provides a useful place to start as it has no imports and exports a \langSig. This module only understands 2 programs, \verb#'(loop)# and \verb#'(err)#. \verb#'(loop)# will loop forever doing nothing and \verb#'(err)# will cease computation and exit with an error message.
+
+The \verb#admin-lang# form will return a result if a value is passed to it, and will error if and exception is passed to it.
+\lstinputlisting[frame=tb,
+    caption={Base unit},
+    captionpos=b,
+    belowcaptionskip=2cm]{stubs/base.rkt}
+\subsubsection{Arithmetic}
+The arithmetic module adds support for numbers as well as \verb#'(add1 exp)# and \verb#'(sub1 exp)# forms.
+\lstinputlisting[frame=tb,
+    caption={Arithmetic unit},
+    captionpos=b,
+    belowcaptionskip=2cm]{stubs/arithmetic.rkt}
+\subsubsection{Conditionals}
+The conditionals module adds support for booleans as well as \verb#'(zero? exp)# and \verb#'(if condExp thnExp elsExp)# forms. Since the \verb#'(if condExp thnExp elsExp)# form may have an effect returned as a the result of the \verb#condExp#, finishing the computation requires asking the \verb#handler# to finish the computation.
+\lstinputlisting[frame=tb,
+    caption={Conditionals unit},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/conditionals.rkt}
+\subsubsection{Functions}
+The functions module adds support for lambda expressions, function application, and variables. Function application uses the \verb#'(app fun val)# form because otherwise there would be no way to distinguish between application of user defined functions and primitive forms defined in other modules. For similar reasons, variable access uses \verb#'(var name)#.
+\lstinputlisting[frame=tb,
+    caption={Functions unit},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/functions.rkt}
+\subsubsection{State}
+The state module adds support for stateful computations through the forms \verb#'(box exp)#, \verb#'(unbox locExp)#, and \verb#'(<- locExp exp)# representing boxing, unboxing, and reboxing respectively. This module adds a Store to the resources, which is a simple hash table from locations to values. Locations are merely a wrapper around an integer to make it so that numbers in the target language cannot be treated as a location.
+\lstinputlisting[frame=tb,
+    caption={State unit},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/state.rkt}
+\subsubsection{Control}
+the control module adds support for continuation manipulation through the forms \verb#'(catch name exp)# and \verb#'(throw name exp)#.
+\lstinputlisting[frame=tb,
+    caption={Control unit},
+    captionpos=b,
+    belowcaptionskip=2cm,
+    literate={lambda}{$\lambda$}{1}]{stubs/control.rkt}
