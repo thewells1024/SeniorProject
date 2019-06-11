@@ -1,4 +1,13 @@
 % !TeX root = ../report.tex
 
 \section{Results}
-The modules compose without regard to order in which they are linked together, and the result of the computation are the same.
+~
+
+By leveraging the unit library in Typed Racket, we remove the need for creating a structure to allow composition of the modules. Using units also gives a simple way of solving the need for a circular  dependency structure.
+
+\subsection{Considerations}
+~
+
+This system allows a user to optimize performance to suit their individual requirements. For instance, a programmer writing a program that uses many operations from the State module and few from the Control module, may wish to link the State module closer to the top than the Control module.
+
+One drawback is that the signatures require knowledge of what types the language will handle. This means that it is not possible to completely decouple the modules from each other.

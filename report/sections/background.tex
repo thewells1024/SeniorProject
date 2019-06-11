@@ -2,7 +2,11 @@
 
 \section{Background}
 \subsection{Typed Units}
+~
+
 Units are a module system that allow for more modular code by removing the requirement for dependencies to be specified at the time the module is written. Instead, function names are grouped into sets called signatures, and each unit defines the set of signatures that it requires and the set of signatures that it provides. This is achieved by having the end user construct a linking structure telling the language how to route requests outside of the module \cite{units}.
 Typed units take the concepts of units and applies types to the signatures. This allows the type checker to enforce static type checks at the unit boundaries \cite{typed_units}.
 \subsection{Extensible Denotational Semantics}
+~
+
 Extensible Denotational Semantics is the process of specifying a language by building small modules that take individual concepts such as functions and encapsulate the functionality associated with the concept. These modules are then composed into a full language\cite{eds}.
