@@ -10,4 +10,6 @@ By leveraging the unit library in Typed Racket, we remove the need for creating 
 
 This system allows a user to optimize performance to suit their individual requirements. For instance, a programmer writing a program that uses many operations from the State module and few from the Control module, may wish to link the State module closer to the top than the Control module.
 
-One drawback is that the signatures require knowledge of what types the language will handle. This means that it is not possible to completely decouple the modules from each other.
+One area where this could be improved is by separating the \langSig into a signature for \verb#eval-lang# for the evaluation of the language and \verb#admin-lang# and \verb#resources# for the administration of effects. This could be useful, as many of the language features that will be used often have no effects that need the admin function, and thus those definitions can be eliminated. Therefore, a language that evaluates modules in the order \verb#arithmetic#, \verb#conditionals#, \verb#functions#, \verb#state#, \verb#control#, and finally \verb#base# and administers \verb#state#, \verb#control#, and then \verb#base# would be more efficient than one that administers things in the same order as evaluation.
+
+One drawback is that the signatures require knowledge of what types the language will handle. This means that it is not possible to completely decouple the modules from each other. This issue has been addressed by others working in this field\cite{effects}.
